@@ -1,1 +1,12 @@
+zigbee_home:
+  name: "Smart Water Valve"
+  model: "ZH-NRF52840-VALVE"
+  manufacturer: "DIY"
 
+board: nrf52840dongle_nrf52840 # Или ваша плата, например, ebyte_e73_2g4m08s1c
+
+switch:
+  - platform: gpio
+    name: "Water Valve Switch"
+    pin: P0.20 # Пин управления реле крана
+    id: valve_relay
