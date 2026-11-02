@@ -1,12 +1,15 @@
 zigbee_home:
-  name: "Smart Water Valve"
-  model: "ZH-NRF52840-VALVE"
+  name: "SuperMini Water Valve"
+  model: "ZH-SUPERMINI-VALVE"
   manufacturer: "DIY"
 
-board: nrf52840dongle_nrf52840 # Или ваша плата, например, ebyte_e73_2g4m08s1c
+# Указываем целевую плату для SuperMini / Pro Micro nRF52840
+board: promicro_nrf52840
 
+# Конфигурация исполнительного реле крана
 switch:
   - platform: gpio
-    name: "Water Valve Switch"
-    pin: P0.20 # Пин управления реле крана
+    name: "Water Valve"
+    pin: P0.20           # Это пин 9 на шелкографии платы SuperMini (по схеме Pro Micro)
+    inverted: false      # Поменяйте на true, если реле срабатывает от низкого уровня (GND)
     id: valve_relay
