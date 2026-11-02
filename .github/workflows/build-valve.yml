@@ -6,21 +6,33 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container:
-      # Используем официальный открытый Docker-образ от Nordic Semiconductor
-      image: nordicsemi/nrfconnect-sdk:v2.5.0
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install local zigbee_home package
-        run: |
-          pip3 install --upgrade pip
-          pip3 install .
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
 
-      - name: Compile Firmware
+      - name: Install West
         run: |
+          pip install --upgrade pip
+          pip install west
+
+      - name: Initialize West Workspace
+        run: |
+          # Инициализируем только манифест, без скачивания всего SDK
+          west init -l . || true
+          
+      - name: Install zigbee_home CLI
+        run: |
+          pip install .
+
+      - name: Compile Firmware via CLI
+        run: |
+          # Флаг --local или прямая сборка через python-модуль
           python3 -m zigbee_home compile valve_supermini.yaml
 
       - name: Upload Artifacts
