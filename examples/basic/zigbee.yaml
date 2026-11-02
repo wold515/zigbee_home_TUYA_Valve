@@ -1,13 +1,10 @@
 general:
-  # Используем кастомное определение платы от автора для SuperMini
-  board: nrf52840dongle_nrf52840
+  board: custom_promicro_nrf52840/nrf52840
 
 board:
-  # Кран должен быть роутером, чтобы всегда мгновенно принимать команды закрытия
   is_router: true
   bootloader: adafruit_nrf52_sd140_v6
   
-  # Оставляем кнопку для ручного управления краном или сброса сети (пин P1.15)
   buttons:
     - id: button1
       pin:
@@ -15,11 +12,25 @@ board:
         pin: 15
 
 sensors:
-  # Кран настраивается как on_off устройство
+  # Наш кран (реле)
   - type: on_off
-    # Указываем пин реле крана (Пин 9 на плате SuperMini = Порт 0, Пин 20)
     pin:
       port: 0
-      pin: 20
-    # Привязываем физическую кнопку, чтобы можно было переключать кран вручную
+      pin: 20            # Пин 9 на плате SuperMini
     control_button: button1
+
+  # ПРОВОДНОЙ ДАТЧИК ПРОТЕЧКИ 1
+  - type: on_off         # В Zigbee бинарные входы часто описываются как on_off или binary_input
+    name: "Wired Leak Sensor 1"
+    pin:
+      port: 0
+      pin: 6             # Это пин 4 на плате SuperMini
+      pull: pull_up      # Внутренняя подтяжка к 3.3В
+
+  # ПРОВОДНОЙ ДАТЧИК ПРОТЕЧКИ 2 (если нужно в другое место подтянуть)
+  - type: on_off
+    name: "Wired Leak Sensor 2"
+    pin:
+      port: 0
+      pin: 8             # Это пин 5 на плате SuperMini
+      pull: pull_up
