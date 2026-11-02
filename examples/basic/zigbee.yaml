@@ -1,17 +1,25 @@
 general:
+  # Используем кастомное определение платы от автора для SuperMini
   board: custom_promicro_nrf52840/nrf52840
 
 board:
+  # Кран должен быть роутером, чтобы всегда мгновенно принимать команды закрытия
+  is_router: true
   bootloader: adafruit_nrf52_sd140_v6
   
-  factory_reset_button: btn1
+  # Оставляем кнопку для ручного управления краном или сброса сети (пин P1.15)
   buttons:
-    - id: btn1
-      pin: 1.15
+    - id: button1
+      pin:
+        port: 1
+        pin: 15
 
-  # Переносим реле внутрь секции board, как требует парсер
-  outputs:
-    - id: relay1
-      type: gpio
-      pin: 0.20
-      inverted: false
+sensors:
+  # Кран настраивается как on_off устройство
+  - type: on_off
+    # Указываем пин реле крана (Пин 9 на плате SuperMini = Порт 0, Пин 20)
+    pin:
+      port: 0
+      pin: 20
+    # Привязываем физическую кнопку, чтобы можно было переключать кран вручную
+    control_button: button1
