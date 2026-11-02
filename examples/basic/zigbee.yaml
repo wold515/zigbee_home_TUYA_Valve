@@ -1,19 +1,17 @@
 general:
-  # Используем кастомное определение платы от автора для SuperMini
   board: custom_promicro_nrf52840/nrf52840
 
 board:
   bootloader: adafruit_nrf52_sd140_v6
   
-  # Настройка встроенной кнопки на плате для сброса сети (пин P1.15)
   factory_reset_button: btn1
   buttons:
     - id: btn1
       pin: 1.15
 
-# Конфигурация исполнительного реле крана
-outputs:
-  - id: relay1
-    type: gpio
-    pin: 0.20            # Пин P0.20 (соответствует пину 9 на плате SuperMini)
-    inverted: false      # true, если ваше реле срабатывает от низкого уровня (GND)
+  # Переносим реле внутрь секции board, как требует парсер
+  outputs:
+    - id: relay1
+      type: gpio
+      pin: 0.20
+      inverted: false
