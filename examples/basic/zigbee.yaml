@@ -1,2 +1,13 @@
-general:
-  board: nrf52840dongle_nrf52840
+zigbee_home:
+  name: "SuperMini Water Valve"
+  model: "ZH-SUPERMINI-VALVE"
+  manufacturer: "DIY"
+
+# Заставляем его собирать под вашу плату SuperMini
+board: promicro_nrf52840
+
+switch:
+  - platform: gpio
+    name: "Water Valve"
+    pin: P0.20 # Пин реле крана
+    id: valve_relay
