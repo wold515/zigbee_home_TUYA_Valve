@@ -148,6 +148,8 @@ jobs:
           echo "Set ZEPHYR_BASE at ${ZEPHYR_BASE}."
 
           ./nrfutil toolchain-manager launch --ncs-version ${TOOLCHAIN_VERSION} -- bash -c './zigbee_home firmware --workdir ./examples/${{ matrix.examples }} build --config ./examples/${{ matrix.examples }}/zigbee.yaml'
-      - name: Get download link
-        run: |
-          curl -T ./examples/basic/build/basic/zephyr/zephyr.uf2 https://bashupload.com
+      - name: Upload Firmware Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: supermini-valve-firmware
+          path: examples/basic/build/basic/zephyr/zephyr.uf2
