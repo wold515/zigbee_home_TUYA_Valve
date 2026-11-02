@@ -11,24 +11,33 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build Local Docker Image
-        uses: docker/build-push-action@v6
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          context: .
-          file: ./Dockerfile
-          tags: local-zigbee-home:latest
-          outputs: type=docker,dest=/tmp/image.tar
+          python-version: '3.10'
 
-      - name: Load Local Docker Image
+      - name: Install West and Zephyr Dependencies
         run: |
-          docker load --input /tmp/image.tar
+          pip install --upgrade pip
+          pip install west cmake ninja
+          # Инициализируем окружение zephyr, если это необходимо проекту
+          west init -m https://github.com --mr v3.5.0 zephyrproject
+          cd zephyrproject && west update && west zephyr-export && cd ..
 
-      - name: Compile Firmware inside Container
+      - name: Install Toolchain (ARM Compiler)
         run: |
-          docker run --rm -v ${{ github.workspace }}:/workspace -w /workspace local-zigbee-home:latest python3 -m zigbee_home compile valve_supermini.yaml
+          wget https://github.com
+          tar -xf zephyr-sdk-0.16.5_linux-x86_64_minimal.tar.xz
+          cd zephyr-sdk-0.16.5 && ./setup.sh -t arm-zephyr-eabi -c && cd ..
+          echo "ZEPHYR_SDK_INSTALL_DIR=$GITHUB_WORKSPACE/zephyr-sdk-0.16.5" >> $GITHUB_ENV
+
+      - name: Install zigbee_home
+        run: |
+          pip install .
+
+      - name: Compile Firmware
+        run: |
+          python3 -m zigbee_home compile valve_supermini.yaml
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
