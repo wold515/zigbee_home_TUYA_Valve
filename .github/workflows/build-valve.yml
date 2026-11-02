@@ -6,34 +6,18 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container:
+      # Используем официальный открытый Docker-образ от Nordic Semiconductor
+      image: nordicsemi/nrfconnect-sdk:v2.5.0
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-
-      - name: Install West and Zephyr Dependencies
+      - name: Install local zigbee_home package
         run: |
-          pip install --upgrade pip
-          pip install west cmake ninja
-          # Инициализируем окружение zephyr, если это необходимо проекту
-          west init -m https://github.com --mr v3.5.0 zephyrproject
-          cd zephyrproject && west update && west zephyr-export && cd ..
-
-      - name: Install Toolchain (ARM Compiler)
-        run: |
-          wget https://github.com
-          tar -xf zephyr-sdk-0.16.5_linux-x86_64_minimal.tar.xz
-          cd zephyr-sdk-0.16.5 && ./setup.sh -t arm-zephyr-eabi -c && cd ..
-          echo "ZEPHYR_SDK_INSTALL_DIR=$GITHUB_WORKSPACE/zephyr-sdk-0.16.5" >> $GITHUB_ENV
-
-      - name: Install zigbee_home
-        run: |
-          pip install .
+          pip3 install --upgrade pip
+          pip3 install .
 
       - name: Compile Firmware
         run: |
