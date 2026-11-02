@@ -1,0 +1,24 @@
+name: Build Zigbee Firmware
+
+on:
+  workflow_dispatch: # Позволит запускать сборку вручную кнопкой
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/ffenix113/zigbee_home:latest # Официальный Docker-образ проекта
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Compile Firmware
+        run: |
+          python3 -m zigbee_home compile valve_supermini.yaml
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: supermini-valve-firmware
+          path: .zigbee_home/build/zephyr/zephyr.uf2
