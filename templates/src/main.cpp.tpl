@@ -87,7 +87,7 @@ static const uint32_t loop_sleep_milis = {{.Device.General.RunEvery.Milliseconds
 
 {{/* This check should be a helper really */}}
 {{- if not (eq .Device.Board.NetworkStateLED "") }}
-static void toggle_identify_led(uint16_t led_data)
+static void toggle_identify_led(uint8_t led_data)
 {
 	bool led_on = led_data & 1;
 	uint8_t led_idx = led_data >> 1;
