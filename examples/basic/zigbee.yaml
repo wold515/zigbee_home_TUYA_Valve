@@ -5,40 +5,32 @@ board:
   is_router: true
   bootloader: adafruit_nrf52_sd140_v6
   
-  # Описываем все физические входы платы как кнопки для авто-подтяжки (pull-up)
   buttons:
-    # Сервисная кнопка на плате SuperMini (P1.15)
     - id: button1
       pin: "1.15"
-    # Вход для Датчика протечки 1 (пин 4 на плате -> P0.06)
     - id: leak_pin1
       pin: "0.06"
-      inverted: true     # Срабатывает при замыкании водой на GND
-    # Вход для Датчика протечки 2 (пин 5 на плате -> P0.08)
+      inverted: true
     - id: leak_pin2
       pin: "0.08"
       inverted: true
 
 sensors:
-  # КРАН 1 (Холодная вода) — пин 9 (P0.20)
+  # КРАН 1 (Холодная вода)
   - type: on_off
-    name: "Cold Water Valve"
     pin: "0.20"
     control_button: button1
 
-  # КРАН 2 (Горячая вода) — пин 10 (P0.22)
+  # КРАН 2 (Горячая вода)
   - type: on_off
-    name: "Hot Water Valve"
     pin: "0.22"
 
-  # ДАТЧИК ПРОТЕЧКИ 1 (Home Assistant увидит его как бинарный датчик contact)
+  # ДАТЧИК ПРОТЕЧКИ 1
   - type: ias_zone
-    name: "Wired Leak Sensor 1"
     zone_type: "contact"
-    button: leak_pin1    # Привязали к кнопке на пине 4
+    button: leak_pin1
 
   # ДАТЧИК ПРОТЕЧКИ 2
   - type: ias_zone
-    name: "Wired Leak Sensor 2"
     zone_type: "contact"
-    button: leak_pin2    # Привязали к кнопке на пине 5
+    button: leak_pin2
