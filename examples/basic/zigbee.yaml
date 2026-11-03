@@ -1,11 +1,11 @@
 general:
-  board: custom_promicro_nrf52840/nrf52840
+  # Возвращаем стандартную плату Zephyr, чтобы компилятор не падал
+  board: nrf52840dongle_nrf52840
 
 board:
   is_router: true
-  bootloader: adafruit_nrf52_sd140_v6
   
-  # Короткая и корректная запись кнопок (они автоматически инвертированы на GND)
+  # Короткая запись кнопок (порты сверяем по схеме nRF52840 Dongle)
   buttons:
     - id: button1
       pin: "1.15"
@@ -15,19 +15,21 @@ board:
       pin: "0.08"
 
 sensors:
-  # КРАН 1 (Холодная вода)
+  # КРАН 1 (Холодная вода) — физический выход
   - type: on_off
     pin: "0.20"
     control_button: button1
 
-  # КРАН 2 (Горячая вода)
+  # КРАН 2 (Горячая вода) — физический выход
   - type: on_off
     pin: "0.22"
 
-  # ВИРТУАЛЬНЫЙ ДАТЧИК 1 (Привязан к физическому пину 4 через leak_pin1)
+  # ДАТЧИК ПРОТЕЧКИ 1
   - type: on_off
+    pin: "0.06"
     control_button: leak_pin1
 
-  # ВИРТУАЛЬНЫЙ ДАТЧИК 2 (Привязан к физическому пину 5 через leak_pin2)
+  # ДАТЧИК ПРОТЕЧКИ 2
   - type: on_off
+    pin: "0.08"
     control_button: leak_pin2
