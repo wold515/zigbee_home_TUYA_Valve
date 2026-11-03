@@ -1,26 +1,37 @@
 general:
-  # Because Pro Micro nRF52840 board is not supported by zephyr yet, we need to provide its whole definition by ourselves, this can be found in the "boards" folder.
-  # The details on the capability of supporting custom boards can be found at: https://docs.zephyrproject.org/latest/hardware/porting/board_porting.html
-  #
-  # This board will be supported in Zephyr v4.1.0, but nRF Connect Zigbee AddOn may not support Zephyr v4.1.0 for some time,
-  # so it is a good candidate.
-  #
-  # It is defined in this example with `custom_` prefix to make sure that this will work
-  # even when nRF Connect will support this board natively.
+  # Возвращаем стандартную плату Zephyr, чтобы компилятор не падал
   board: custom_promicro_nrf52840/nrf52840
 
 board:
+  is_router: true
+  # Эта строчка вернет генерацию файла zephyr.uf2 для SuperMini!
   bootloader: adafruit_nrf52_sd140_v6
-  i2c:
-    - id: i2c0
-
-  factory_reset_button: btn1
-
+  
+  # Короткая запись кнопок (порты сверяем по схеме nRF52840 Dongle)
   buttons:
-    - id: btn1
-      pin: 1.15
+    - id: button1
+      pin: "1.15"
+    - id: leak_pin1
+      pin: "0.06"
+    - id: leak_pin2
+      pin: "0.08"
 
 sensors:
-  - type: scd4x
-    i2c:
-      id: i2c0
+  # КРАН 1 (Холодная вода) — физический выход
+  - type: on_off
+    pin: "0.20"
+    control_button: button1
+
+  # КРАН 2 (Горячая вода) — физический выход
+  - type: on_off
+    pin: "0.22"
+
+  # ДАТЧИК ПРОТЕЧКИ 1
+  - type: on_off
+    pin: "0.06"
+    control_button: leak_pin1
+
+  # ДАТЧИК ПРОТЕЧКИ 2
+  - type: on_off
+    pin: "0.08"
+    control_button: leak_pin2

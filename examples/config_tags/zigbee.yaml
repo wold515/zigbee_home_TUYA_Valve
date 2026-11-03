@@ -1,4 +1,0 @@
-general:
-  board: ${ZBHOME_BOARD}
-
-board: !include board.yaml
