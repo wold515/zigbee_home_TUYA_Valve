@@ -152,4 +152,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: supermini-valve-firmware
-          path: examples/custom_board/build/custom_board/zephyr/zephyr.uf2
+          path: examples/custom_board/build/
