@@ -5,15 +5,14 @@ board:
   is_router: true
   bootloader: adafruit_nrf52_sd140_v6
   
+  # Короткая и корректная запись кнопок (они автоматически инвертированы на GND)
   buttons:
     - id: button1
       pin: "1.15"
     - id: leak_pin1
       pin: "0.06"
-      inverted: true
     - id: leak_pin2
       pin: "0.08"
-      inverted: true
 
 sensors:
   # КРАН 1 (Холодная вода)
@@ -25,12 +24,10 @@ sensors:
   - type: on_off
     pin: "0.22"
 
-  # ДАТЧИК ПРОТЕЧКИ 1
-  - type: ias_zone
-    zone_type: "contact"
-    button: leak_pin1
+  # ВИРТУАЛЬНЫЙ ДАТЧИК 1 (Привязан к физическому пину 4 через leak_pin1)
+  - type: on_off
+    control_button: leak_pin1
 
-  # ДАТЧИК ПРОТЕЧКИ 2
-  - type: ias_zone
-    zone_type: "contact"
-    button: leak_pin2
+  # ВИРТУАЛЬНЫЙ ДАТЧИК 2 (Привязан к физическому пину 5 через leak_pin2)
+  - type: on_off
+    control_button: leak_pin2
