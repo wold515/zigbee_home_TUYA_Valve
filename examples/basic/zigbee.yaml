@@ -5,32 +5,40 @@ board:
   is_router: true
   bootloader: adafruit_nrf52_sd140_v6
   
+  # Описываем все физические входы платы как кнопки для авто-подтяжки (pull-up)
   buttons:
+    # Сервисная кнопка на плате SuperMini (P1.15)
     - id: button1
-      pin:
-        port: 1
-        pin: 15
+      pin: "1.15"
+    # Вход для Датчика протечки 1 (пин 4 на плате -> P0.06)
+    - id: leak_pin1
+      pin: "0.06"
+      inverted: true     # Срабатывает при замыкании водой на GND
+    # Вход для Датчика протечки 2 (пин 5 на плате -> P0.08)
+    - id: leak_pin2
+      pin: "0.08"
+      inverted: true
 
 sensors:
-  # Наш кран (реле)
+  # КРАН 1 (Холодная вода) — пин 9 (P0.20)
   - type: on_off
-    pin:
-      port: 0
-      pin: 20            # Пин 9 на плате SuperMini
+    name: "Cold Water Valve"
+    pin: "0.20"
     control_button: button1
 
-  # ПРОВОДНОЙ ДАТЧИК ПРОТЕЧКИ 1
-  - type: on_off         # В Zigbee бинарные входы часто описываются как on_off или binary_input
-    name: "Wired Leak Sensor 1"
-    pin:
-      port: 0
-      pin: 6             # Это пин 4 на плате SuperMini
-      pull: pull_up      # Внутренняя подтяжка к 3.3В
-
-  # ПРОВОДНОЙ ДАТЧИК ПРОТЕЧКИ 2 (если нужно в другое место подтянуть)
+  # КРАН 2 (Горячая вода) — пин 10 (P0.22)
   - type: on_off
+    name: "Hot Water Valve"
+    pin: "0.22"
+
+  # ДАТЧИК ПРОТЕЧКИ 1 (Home Assistant увидит его как бинарный датчик contact)
+  - type: ias_zone
+    name: "Wired Leak Sensor 1"
+    zone_type: "contact"
+    button: leak_pin1    # Привязали к кнопке на пине 4
+
+  # ДАТЧИК ПРОТЕЧКИ 2
+  - type: ias_zone
     name: "Wired Leak Sensor 2"
-    pin:
-      port: 0
-      pin: 8             # Это пин 5 на плате SuperMini
-      pull: pull_up
+    zone_type: "contact"
+    button: leak_pin2    # Привязали к кнопке на пине 5
