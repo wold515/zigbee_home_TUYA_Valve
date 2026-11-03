@@ -4,6 +4,8 @@ general:
 
 board:
   is_router: true
+  # Эта строчка вернет генерацию файла zephyr.uf2 для SuperMini!
+  bootloader: adafruit_nrf52_sd140_v6
   
   # Короткая запись кнопок (порты сверяем по схеме nRF52840 Dongle)
   buttons:
